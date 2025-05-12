@@ -196,7 +196,7 @@ export const createCandidate = async (req, res, next) => {
 
 // @desc    Update candidate
 // @route   PUT /api/candidates/:id
-// @access  Private
+// @access  Public
 export const updateCandidate = async (req, res, next) => {
   try {
     let candidate = await Candidate.findById(req.params.id);
@@ -207,12 +207,8 @@ export const updateCandidate = async (req, res, next) => {
       );
     }
     
-    // Check if user is admin if trying to update status
-    if (req.body.status && req.user.role !== 'admin') {
-      return next(
-        new ErrorResponse('Only admins can change candidate status', 403)
-      );
-    }
+    // Removed admin-only check for status updates
+    // Now any user can update any field including status
     
     candidate = await Candidate.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -278,7 +274,7 @@ export const updateCandidateStatus = async (req, res, next) => {
 
 // @desc    Delete candidate
 // @route   DELETE /api/candidates/:id
-// @access  Private
+// @access  Public
 export const deleteCandidate = async (req, res, next) => {
   try {
     const candidate = await Candidate.findById(req.params.id);
