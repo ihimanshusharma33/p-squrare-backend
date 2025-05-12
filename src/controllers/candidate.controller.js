@@ -89,7 +89,7 @@ export const getCandidatesByStatus = async (req, res, next) => {
     const { status } = req.params;
     
     // Validate status
-    const validStatuses = ['rejected', 'ongoing', 'selected', 'scheduled'];
+    const validStatuses = ['Rejected','New', 'Ongoing', 'Selected', 'Scheduled'];
     if (!validStatuses.includes(status)) {
       return next(
         new ErrorResponse(`Invalid status: ${status}. Valid statuses are: ${validStatuses.join(', ')}`, 400)
