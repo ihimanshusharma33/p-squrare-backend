@@ -169,11 +169,25 @@ export const createCandidate = async (req, res, next) => {
     // Add user to req.body
     req.body.createdBy = req.user.id;
     
+    // Handle the resume file if it exists
+    if (req.file) {
+      // Store the binary data and filename
+      req.body.resume_file = req.file.buffer;
+      req.body.resume_filename = req.file.originalname;
+    }
+    
+    // Create the candidate record
     const candidate = await Candidate.create(req.body);
+    
+    // Don't send the binary resume data back in the response
+    const responseCandidate = candidate.toObject();
+    if (responseCandidate.resume_file) {
+      responseCandidate.resume_file = 'Binary data not shown';
+    }
     
     res.status(201).json({
       success: true,
-      data: candidate
+      data: responseCandidate
     });
   } catch (err) {
     next(err);

@@ -16,6 +16,10 @@ const candidateSchema = new mongoose.Schema({
     ],
     lowercase: true
   },
+  phone: {
+    type: String,
+    required: [true, 'Please add a phone number']
+  },
   status: {
     type: String,
     enum: ['rejected', 'ongoing', 'selected', 'scheduled'],
@@ -32,6 +36,14 @@ const candidateSchema = new mongoose.Schema({
     default: 0
   },
   resume_URL: {
+    type: String,
+    default: null
+  },
+  resume_file: {
+    type: Buffer,
+    default: null
+  },
+  resume_filename: {
     type: String,
     default: null
   },

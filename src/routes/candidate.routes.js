@@ -11,6 +11,7 @@ import {
 } from '../controllers/candidate.controller.js';
 
 import { protect } from '../middleware/auth.middleware.js';
+import { uploadResume } from '../utils/fileUpload.js';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.put('/:id/status', updateCandidateStatus);
 // Basic CRUD routes
 router.route('/')
   .get(getCandidates)
-  .post(createCandidate);
+  .post(uploadResume, createCandidate);  // Add uploadResume middleware
 
 router.route('/:id')
   .get(getCandidate)
