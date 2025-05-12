@@ -24,8 +24,8 @@ const candidateSchema = new mongoose.Schema({
   },
   position: {
     type: String,
-    enum: ['Developer', 'Designer', 'HR'],
-    required: [true, 'Please specify the position']
+    required: [true, 'Please specify the position'],
+    trim: true
   },
   experience: {
     type: Number,

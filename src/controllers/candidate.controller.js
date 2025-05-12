@@ -118,14 +118,6 @@ export const getCandidatesByPosition = async (req, res, next) => {
   try {
     const { position } = req.params;
     
-    // Validate position
-    const validPositions = ['Developer', 'Designer', 'HR'];
-    if (!validPositions.some(p => p.toLowerCase() === position.toLowerCase())) {
-      return next(
-        new ErrorResponse(`Invalid position: ${position}. Valid positions are: ${validPositions.join(', ')}`, 400)
-      );
-    }
-    
     // Case insensitive search for position
     const candidates = await Candidate.find({
       position: { $regex: new RegExp(position, 'i') }
@@ -177,16 +169,6 @@ export const createCandidate = async (req, res, next) => {
     // Add user to req.body
     req.body.createdBy = req.user.id;
     
-    // Validate position
-    if (req.body.position) {
-      const validPositions = ['Developer', 'Designer', 'HR'];
-      if (!validPositions.includes(req.body.position)) {
-        return next(
-          new ErrorResponse(`Invalid position: ${req.body.position}. Valid positions are: ${validPositions.join(', ')}`, 400)
-        );
-      }
-    }
-    
     const candidate = await Candidate.create(req.body);
     
     res.status(201).json({
@@ -209,16 +191,6 @@ export const updateCandidate = async (req, res, next) => {
       return next(
         new ErrorResponse(`Candidate not found with id of ${req.params.id}`, 404)
       );
-    }
-    
-    // Validate position if provided
-    if (req.body.position) {
-      const validPositions = ['Developer', 'Designer', 'HR'];
-      if (!validPositions.includes(req.body.position)) {
-        return next(
-          new ErrorResponse(`Invalid position: ${req.body.position}. Valid positions are: ${validPositions.join(', ')}`, 400)
-        );
-      }
     }
     
     // Check if user is admin if trying to update status
